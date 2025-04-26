@@ -3,10 +3,15 @@
 import axios from "axios";
 import {getBooks} from "@/shared/config/api";
 import {useState} from "react";
+import {redirect} from "next/navigation";
+import {Book} from "@/shared/types/book";
+import {bookStore} from "@/entities/book/model/bookStore";
 
 
 export const SearchForm = () => {
     const [inputValue, setInputValue] = useState("");
+    const books = bookStore((state) => state.books);
+    const setBooks = bookStore((state) => state.setBooks);
 
     const handleSearch = async() => {
         try {
@@ -14,9 +19,7 @@ export const SearchForm = () => {
                 query: inputValue,
                 maxResults: 15,
             }));
-
-            const books = await response.data;
-            console.log(books);
+            return await response.data;
         }
         catch (error) {
             console.log(error);
@@ -28,7 +31,12 @@ export const SearchForm = () => {
             className="flex gap-4"
             onSubmit={(e) => {
                 e.preventDefault();
-                handleSearch();
+                handleSearch().then(({items}) => {
+                    if (items && items.length > 0) {
+                        setBooks(items);
+                        redirect("/books");
+                    }
+                })
             }}
         >
             <div>
