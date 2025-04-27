@@ -1,13 +1,19 @@
-import Layout from "@/app/layout";
+"use client";
+
 import {SearchPage} from "@/pages/SearchPage/SearchPage";
+import {loadingStore} from "@/shared/model/loadingStore";
+import Loader from "@/shared/ui/Loader/Loader";
 
 export default function Home() {
-  return (
-      <div>
-        <h1 className="text-2xl font-bold">📚 Welcome to Book Store</h1>
-        <p>Use the search bar to find your next favorite book.</p>
+    const isLoading = loadingStore((state) => state.isLoading);
 
-          <SearchPage />
-      </div>
+  return (
+      <>
+          {isLoading ? <Loader/> : <div>
+              <h1 className="text-2xl font-bold">📚 Welcome to Book Store</h1>
+              <p>Use the search bar to find your next favorite book.</p>
+              <SearchPage/>
+          </div>}
+      </>
   );
 }
