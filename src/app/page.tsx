@@ -7,13 +7,13 @@ import Loader from "@/shared/ui/Loader/Loader";
 export default function Home() {
     const isLoading = loadingStore((state) => state.isLoading);
 
-  return (
-      <>
-          {isLoading ? <Loader/> : <div>
-              <h1 className="text-2xl font-bold">📚 Welcome to Book Store</h1>
-              <p>Use the search bar to find your next favorite book.</p>
-              <SearchPage/>
-          </div>}
-      </>
-  );
+    return (
+        <>
+            {isLoading ? <Loader/> : <div>
+                <h1 className="text-2xl font-bold">📚 Welcome to Book Store</h1>
+                <p>Use the search bar to find your next favorite book.</p>
+                <SearchPage/>
+            </div>}
+        </>
+    );
 }
