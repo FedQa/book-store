@@ -20,6 +20,7 @@ export type Book = {
         listPrice: {
             amount: number;
             currencyCode: string;
+            //quantity: number;
         }
     }
 }

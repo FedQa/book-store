@@ -2,15 +2,20 @@ import {Card} from "antd";
 import {Book} from "@/shared/types/book";
 import { Typography } from "antd";
 import styles from './BookCard.module.css'
-import {EditOutlined, EllipsisOutlined, HeartTwoTone, SettingOutlined, ShoppingTwoTone} from "@ant-design/icons";
+import {
+    DeleteTwoTone,
+    HeartTwoTone,
+    ShoppingTwoTone
+} from "@ant-design/icons";
 import {cartStore} from "@/entities/cart/model/cartStore";
 
 interface IBookCardProps {
     book: Book;
+    isInCart?: boolean;
 }
 
 export const BookCard = (props:IBookCardProps) => {
-    const {book} = props;
+    const {book, isInCart} = props;
 
     const addToCart = cartStore(state => state.addToCart);
     const cart = cartStore(state => state.cart);
@@ -24,9 +29,9 @@ export const BookCard = (props:IBookCardProps) => {
                       <HeartTwoTone key="edit" />,
                       <ShoppingTwoTone key="ellipsis" onClick={() => {
                           addToCart(book);
-                          console.log(book);
-                          console.log(cart)
-                      }} />,
+                      }}
+                      />,
+                      isInCart && <DeleteTwoTone />
                   ]}
             >
                 <Typography.Paragraph ellipsis={true}>

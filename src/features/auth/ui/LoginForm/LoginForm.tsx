@@ -20,9 +20,6 @@ export const LoginForm = () => {
 
             const response = await axios.get(url);
             const users = await response.data;
-            console.log(users);
-
-
             return users.some((user:any) => user.login === login && user.password === password);
         }
         catch(err) {

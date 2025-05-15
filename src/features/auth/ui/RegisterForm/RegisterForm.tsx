@@ -1,27 +1,41 @@
 "use client";
 
 import axios from "axios";
+import {debounce} from "@/shared/lib/debounce";
+import {loadingStore} from "@/shared/model/loadingStore";
 
 export const RegisterForm = () => {
+    const setIsLoading = loadingStore(state => state.setIsLoading);
+
     const handleRegister = async (e: any) => {
-        const formData = new FormData(e.target);
-        const url = "https://6810687c27f2fdac24113e5a.mockapi.io/users";
+        try {
+            setIsLoading(true);
+            const formData = new FormData(e.target);
+            const url = "https://6810687c27f2fdac24113e5a.mockapi.io/users";
 
-        const login = formData.get("login");
-        const password = formData.get("password");
-        const confirmPassword = formData.get("confirm-password");
+            const login = formData.get("login");
+            const password = formData.get("password");
+            const confirmPassword = formData.get("confirm-password");
 
-        const response = await axios.post(url, {
-            login,
-            password,
-        });
+            const response = await axios.post(url, {
+                login,
+                password,
+            });
 
-        const data = await response.data;
-        console.log(data);
+            const data = await response.data;
+            console.log(data);
 
-         console.log(login, password);
+            console.log(login, password);
 
-        //console.log(formData);
+            //console.log(formData);
+        }
+        catch (error) {
+            console.log(error);
+        }
+        finally {
+            await debounce(2000);
+            setIsLoading(false);
+        }
     }
 
     return (
@@ -64,7 +78,7 @@ export const RegisterForm = () => {
                                        required/>
                             </div>
                             <button type="submit"
-                                    className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create
+                                    className="w-full border-1 border-solid text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create
                                 an account
                             </button>
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400">

@@ -9,11 +9,14 @@ export default function Home() {
 
     return (
         <>
-            {isLoading ? <Loader/> : <div>
-                <h1 className="text-2xl font-bold">📚 Welcome to Book Store</h1>
-                <p>Use the search bar to find your next favorite book.</p>
+            {isLoading ? <Loader/> : <div className="flex flex-col gap-6">
+                <div>
+                    <h1 className="text-2xl font-bold">📚 Welcome to Book Store</h1>
+                    <p>Use the search bar to find your next favorite book.</p>
+                </div>
                 <SearchPage/>
-            </div>}
+            </div>
+            }
         </>
     );
 }
