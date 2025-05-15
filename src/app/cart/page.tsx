@@ -34,7 +34,7 @@ export default function CartPage(){
                         <div className="space-y-6">
                             {booksInCart && booksInCart.length > 0 &&
                                 booksInCart.map((book) => (
-                                    <div
+                                    <div key={book.id}
                                         className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
                                         <div
                                             className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
@@ -65,7 +65,7 @@ export default function CartPage(){
                                                     </button>
                                                     <input type="text" id="counter-input" data-input-counter
                                                            className="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 dark:text-white"
-                                                           placeholder="" value={book.quantity} required/>
+                                                           placeholder="" value={book.quantity} readOnly required/>
                                                     <button type="button" id="increment-button"
                                                             onClick={() => incrementQuantity(book)}
                                                             data-input-counter-increment="counter-input"

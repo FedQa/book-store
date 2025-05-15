@@ -1,5 +1,7 @@
 import {create} from "zustand";
 import {Book} from "@/shared/types/book";
+import {immer} from "zustand/middleware/immer";
+import {persist} from "zustand/middleware";
 
 
 type CartBook = Book & { quantity: number, price: number, currencyCode: string };
@@ -13,45 +15,39 @@ interface CartStore {
     clearCart: () => void,
 }
 
-export const cartStore = create<CartStore>((set) => ({
+export const cartStore = create<CartStore>()(persist(immer((set) => ({
     cart: [],
 
-    addToCart: (book: Book) => set(state => {
+    addToCart: (book: Book) =>
+        set((state) => {
         const existing = state.cart.find(item => item.id === book.id);
         if (existing) {
-            return {
-                cart: state.cart.map((item) => {
-                    return item.id === book.id ? {...item, quantity: item.quantity + 1} : item;
-                }),
-            }
+            existing.quantity += 1;
         }
-
-        console.log(state.cart);
-
-        const price = book.saleInfo?.listPrice?.amount ? book.saleInfo?.listPrice?.amount : Math.floor(Math.random() * 1501);
-        const currencyCode = book.saleInfo?.listPrice?.currencyCode ? book.saleInfo?.listPrice?.currencyCode : "RUB";
-
-
-        return {
-            cart: [...state.cart, {...book, quantity: 1, price, currencyCode}]
+        else {
+            const price = book.saleInfo?.listPrice?.amount ? book.saleInfo?.listPrice?.amount : Math.floor(Math.random() * 1501);
+            const currencyCode = book.saleInfo?.listPrice?.currencyCode ? book.saleInfo?.listPrice?.currencyCode : "RUB";
+            state.cart.push({...book, quantity: 1, price, currencyCode});
         }
     }),
 
-    removeFromCart: (book: Book) => set(state => ({
-        cart: state.cart.filter((item: Book) => item.id !== book.id),
-    })),
+    removeFromCart: (book: Book) => set((state) => {
+        state.cart.filter(item => item.id !== book.id);
+    }),
 
-    incrementQuantity: (book: Book) => set(state => ({
-        cart: state.cart.map(item => item.id === book.id ?
-            {...item, quantity: item.quantity + 1}
-            : item),
-    })),
+    incrementQuantity: (book: Book) => set((state) => {
+        const item = state.cart.find(item => item.id === book.id);
+        if (item) {
+            item.quantity +=1;
+        }
+    }),
 
-    decrementQuantity: (book: Book) => set(state => ({
-        cart: state.cart.map(item => item.id === book.id && item.quantity > 0 ?
-            {...item, quantity: item.quantity - 1}
-            : item),
-    })),
+    decrementQuantity: (book: Book) => set((state) => {
+        const item = state.cart.find(item => item.id === book.id && item.quantity > 0);
+        if (item) {
+            item.quantity -= 1;
+        }
+    }),
 
     clearCart: () => set({ cart: [] }),
-}))
+})), {name: "cartStore"}))
