@@ -32,7 +32,7 @@ export const cartStore = create<CartStore>()(persist(immer((set) => ({
     }),
 
     removeFromCart: (book: Book) => set((state) => {
-        state.cart.filter(item => item.id !== book.id);
+        state.cart = state.cart.filter(item => item.id !== book.id);
     }),
 
     incrementQuantity: (book: Book) => set((state) => {
