@@ -1,3 +1,5 @@
+"use client";
+
 import {Card} from "antd";
 import {Book} from "@/shared/types/book";
 import { Typography } from "antd";
@@ -8,6 +10,7 @@ import {
     ShoppingTwoTone
 } from "@ant-design/icons";
 import {cartStore} from "@/entities/cart/model/cartStore";
+import Link from "next/link";
 
 interface IBookCardProps {
     book: Book;
@@ -22,7 +25,12 @@ export const BookCard = (props:IBookCardProps) => {
 
     return (
             <Card title={book.volumeInfo.title}
-                  extra={<a href="#">More</a>}
+                  extra={
+                      <Link href={`/book/${book.id}`}>
+                          <p>More...</p>
+                      </Link>
+
+                  }
                   style={{ width: 300 }}
                   className={styles.bookCard}
                   actions={[
@@ -31,13 +39,29 @@ export const BookCard = (props:IBookCardProps) => {
                           addToCart(book);
                       }}
                       />,
-                      isInCart && <DeleteTwoTone />
-                  ]}
+                      isInCart ? <DeleteTwoTone /> : null,
+                  ].filter(Boolean)}
             >
-                <Typography.Paragraph ellipsis={true}>
-                    {book.volumeInfo.description}
-                </Typography.Paragraph>
-                <img src={book.volumeInfo.imageLinks?.thumbnail} alt="bookImg" />
+                <div className={styles.body}>
+                    <Typography.Paragraph ellipsis={true}>
+                        {book.volumeInfo.description}
+                    </Typography.Paragraph>
+                    <img src={book.volumeInfo.imageLinks?.thumbnail} alt="bookImg" />
+
+                    <Typography.Text>
+                        Authors: {book.volumeInfo.authors && book.volumeInfo.authors.length > 0 &&
+                        book.volumeInfo.authors.join(", ")
+                    }
+                    </Typography.Text>
+
+                    <Typography.Text>
+                        Publisher: {book.volumeInfo.publisher && book.volumeInfo.publisher.length > 0 && book.volumeInfo.publisher}
+                    </Typography.Text>
+
+                    <Typography.Text>
+                        Page count: {book.volumeInfo.pageCount && book.volumeInfo.pageCount}
+                    </Typography.Text>
+                </div>
             </Card>
     )
 }

@@ -1,0 +1,16 @@
+
+.bookPage {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .bookPageBody {
+        display: flex;
+        gap: 16px;
+    }
+
+    .divider {
+        background-color: darkslategray;
+        border-width: 2px;
+    }
+}
